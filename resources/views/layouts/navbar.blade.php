@@ -19,7 +19,7 @@
                 <a class="nav-link" href="{{route('movie.index')}}">Phim<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="{{route('episode_film.create')}}">Tập phim <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{route('episode.index')}}">Tập phim <span class="sr-only">(current)</span></a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">

@@ -13,7 +13,7 @@ class EpisodeController extends Controller
      */
     public function index()
     {
-        //
+        return view('admins.episode.index');
     }
 
     /**

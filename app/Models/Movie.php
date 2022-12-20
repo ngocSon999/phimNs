@@ -40,4 +40,8 @@ class Movie extends Model
     public function genreMovie(){
         return $this->belongsToMany(Genre::class,'genre_movies','movie_id','genre_id');
     }
+
+    public function episode(){
+        return $this->hasMany(Episode::class,'movie_id','id');
+    }
 }

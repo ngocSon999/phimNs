@@ -54,4 +54,4 @@ Route::get('/update-year-movie',[MovieController::class,'update_year_movie'])->n
 Route::get('/update-season-movie',[MovieController::class,'update_season_movie'])->name('update_season_movie');
 Route::get('/update-top-view',[MovieController::class,'update_top_view'])->name('update_top_view');
 
-Route::resource('/episode_film', EpisodeController::class);
+Route::resource('/episode', EpisodeController::class);

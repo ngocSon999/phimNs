@@ -6,9 +6,9 @@
             <div class="col-md-8">
                 <div class="card">
                     @if(isset($country))
-                        <div class="card-header">Sửa danh mục</div>
+                        <div class="card-header">Sửa danh mục quốc gia</div>
                     @else
-                        <div class="card-header alert alert-primary">Quản lý danh mục</div>
+                        <div class="card-header alert alert-primary">Quản lý danh mục quốc gia</div>
                     @endif
 
 
