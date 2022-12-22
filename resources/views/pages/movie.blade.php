@@ -33,12 +33,18 @@
                             </div>
                         </div>
                         <div class="movie_info col-xs-12">
-                            <div class="movie-poster col-md-3">
+                            <div style="height: 100%" class="movie-poster col-md-3">
                                 <img class="movie-thumb" src="{{asset($movie->image_path)}}" alt="{{$movie->title}}">
                                 @if($movie->resolution != 'Trailer')
                                     <div class="bwa-content">
                                         <div class="loader"></div>
-                                        <a href="{{route('watch')}}" class="bwac-btn">
+                                        @php
+                                            $ep = array();
+                                            foreach ($movie->episode as $episode){
+                                                $ep[]=$episode->episode;
+                                            }
+                                        @endphp
+                                        <a href="{{route('watch',['slug'=>$movie->slug,'season'=>'phần-'.$movie->season,'tap'=>'tập-'.$ep[0]])}}" class="bwac-btn">
                                             <i class="fa fa-play"></i>
                                         </a>
                                     </div>
@@ -52,7 +58,7 @@
                                     style="display:block;line-height:35px;margin-bottom: -14px;color: #ffed4d;text-transform: uppercase;font-size: 18px;">{{$movie->title}}</h1>
                                 <h2 class="movie-title title-2" style="font-size: 12px;">Black Widow (2021)</h2>
                                 <ul class="list-info-group">
-                                    <li class="list-info-group-item"><span>Chất lượng</span> : <span
+                                    <li class="list-info-group-item"><span>Trạng thái</span> : <span
                                             class="quality">{{$movie->resolution}}</span>
                                         @if($movie->resolution != 'Trailer')
                                             <span class="episode">
@@ -66,30 +72,36 @@
                                     </li>
                                     <li class="list-info-group-item"><span>Thời lượng</span>
                                         : {{$movie->movie_duration}}</li>
-                                    @if($movie->season != 0)
-                                    <li class="list-info-group-item"><span>Mùa</span> : {{$movie->season}}</li>
-                                    @endif
-                                    <li class="list-info-group-item"><span>Số tập</span> : {{$movie->total_movie}}/{{$movie->total_movie}}</li>
+
+                                    <li class="list-info-group-item"><span>Season</span> : {{$movie->season}}</li>
+
+                                    <li class="list-info-group-item"><span>Số tập</span> : {{$movie->total_movie}}</li>
+                                    <li class="list-info-group-item"><span>Tình trạng</span> : Đã cập nhật {{$curent_episode .'/'.$movie->total_movie}} tập</li>
                                     <li class="list-info-group-item"><span>Thể loại</span> :
                                         @foreach($movie->genreMovie as $genre)
                                             <a class="badge badge-dark" href="{{route('genre',['slug'=>$genre->slug])}}"
                                                rel="category tag">{{$genre->title}}</a>
                                         @endforeach
                                     </li>
-                                    <li class="list-info-group-item"><span>Danh mục</span> : <a
-                                            href="{{route('category',['slug'=>$movie->category->slug])}}"
-                                            rel="category tag">{{$movie->category->title}}</a></li>
-                                    <li class="list-info-group-item"><span>Quốc gia</span> : <a
-                                            href="{{route('country',['slug'=>$movie->country->slug])}}"
-                                            rel="category tag">{{$movie->country->title}}</a></li>
-                                    <li class="list-info-group-item"><span>Năm</span> : <a
-                                            href="{{route('year_movie',['year'=>$movie->year_movie])}}"
-                                            rel="category tag">{{$movie->year_movie}}</a></li>
-                                    <li class="list-info-group-item"><span>Đạo diễn</span> : <a href=""
-                                                                                                rel="category tag"></a>
+                                    <li class="list-info-group-item"><span>Danh mục</span> :
+                                        <a href="{{route('category',['slug'=>$movie->category->slug])}}"
+                                            rel="category tag">{{$movie->category->title}}</a>
                                     </li>
-                                    <li class="list-info-group-item"><span>Diễn viên</span> : <a href=""
-                                                                                                 rel="category tag"></a>
+                                    <li class="list-info-group-item"><span>Quốc gia</span> :
+                                        <a href="{{route('country',['slug'=>$movie->country->slug])}}"
+                                            rel="category tag">{{$movie->country->title}}
+                                        </a>
+                                    </li>
+                                    <li class="list-info-group-item"><span>Năm</span> :
+                                        <a href="{{route('year_movie',['year'=>$movie->year_movie])}}"
+                                            rel="category tag">{{$movie->year_movie}}
+                                        </a>
+                                    </li>
+                                    <li class="list-info-group-item"><span>Đạo diễn</span> :
+                                        <a href="" rel="category tag"></a>
+                                    </li>
+                                    <li class="list-info-group-item"><span>Diễn viên</span> :
+                                        <a href="" rel="category tag"></a>
                                     </li>
                                 </ul>
                                 <div class="movie-trailer hidden"></div>

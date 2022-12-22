@@ -34,14 +34,14 @@
                     <div class="form-group">
                         {!! form::label('name_eng','Tên tiếng anh',[]) !!}
                         {!! form::text('name_eng',isset($movie)? $movie->name_eng: '',['class'=>'form-control','placeholder'=>'Nhập nội dung...']) !!}
-                        @error('title')
+                        @error('name_eng')
                         <p style="color:red">{{$message}}</p>
                         @enderror
                     </div>
                     <div class="form-group">
                         {!! form::label('trailer','Trailer',[]) !!}
                         {!! form::text('trailer',isset($movie)? $movie->trailer: '',['class'=>'form-control','placeholder'=>'Nhập nội dung...']) !!}
-                        @error('title')
+                        @error('trailer')
                         <p style="color:red">{{$message}}</p>
                         @enderror
                     </div>
@@ -55,15 +55,15 @@
                     <div class="form-group">
                         {!! form::label('total_movie','Số tập phim',[]) !!}
                         {!! form::text('total_movie',isset($movie)? $movie->total_movie: '',['class'=>'form-control','placeholder'=>'Nhập nội dung...']) !!}
-                        @error('title')
+                        @error('total_movie')
                         <p style="color:red">{{$message}}</p>
                         @enderror
                     </div>
                     <div class="form-group">
                         {!! form::label('tag_movie','Từ khóa tìm kiếm',[]) !!}
                         {!! form::textarea('tag_movie',isset($movie)? $movie->tag_movie: '',['class'=>'form-control','rows'=>3,'placeholder'=>'Nhập nội dung...']) !!}
-                        @error('description')
-                        {{--                        <p style="color:red">{{$message}}</p>--}}
+                        @error('tag_movie')
+                        <p style="color:red">{{$message}}</p>
                         @enderror
                     </div>
                     <div class="form-group">

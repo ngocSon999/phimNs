@@ -175,5 +175,21 @@
             })
         })
     </script>
+
+
+    <!--Thêm tập phim-->
+    <script type="text/javascript">
+        $(document).on('change','.select-episode-movie',function (){
+            var movie_id = $(this).find(':selected').val();
+           $.ajax({
+               url:'{{route('movie_episode')}}',
+               type:'get',
+               data:{movie_id:movie_id},
+               success:function (res){
+                   $('.episode-movie').html(res);
+               }
+           })
+        })
+    </script>
 </body>
 </html>

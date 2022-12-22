@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Episode;
 use Illuminate\Http\Request;
+use App\Models\Movie;
 
 class EpisodeController extends Controller
 {
@@ -13,7 +15,8 @@ class EpisodeController extends Controller
      */
     public function index()
     {
-        return view('admins.episode.index');
+        $listEpisode = Episode::all();
+        return view('admis.episode.index',compact('listEpisode'));
     }
 
     /**
@@ -23,7 +26,8 @@ class EpisodeController extends Controller
      */
     public function create()
     {
-        //
+        $listMovie = Movie::pluck('title','id');
+        return view('admis.episode.form',compact('listMovie'));
     }
 
     /**
@@ -34,7 +38,11 @@ class EpisodeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data['movie_id']=$request->movie_id;
+        $data['link_movie']=$request->link_movie;
+        $data['episode']=$request->episode;
+        Episode::create($data);
+        return redirect()->route('episode.index')->with('status','Thêm phim thành công');
     }
 
     /**
@@ -56,7 +64,9 @@ class EpisodeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $episode = Episode::find($id);
+        $listMovie = Movie::pluck('title','id');
+        return view('admis.episode.form',compact('listMovie','episode'));
     }
 
     /**
@@ -68,7 +78,10 @@ class EpisodeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data['movie_id']=$request->movie_id;
+        $data['link_movie']=$request->link_movie;
+        Episode::where('id',$id)->update($data);
+        return redirect()->route('episode.index')->with('status','Cập nhật tập phim thành công');
     }
 
     /**
@@ -79,6 +92,7 @@ class EpisodeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Episode::find($id)->delete();
+        return redirect()->route('episode.index')->with('status','Xóa tập phim thành công');
     }
 }

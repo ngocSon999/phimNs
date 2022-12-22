@@ -2,10 +2,19 @@
 
 namespace App\Providers;
 
+
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+
+use App\Events\ViewMovie;
+use App\Listeners\CountViewMovie;
+
+use App\Events\ViewEpisode;
+use App\Listeners\ViewCountEpisode;
+
+use function Illuminate\Events\queueable;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -27,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Event::listen(ViewMovie::class,CountViewMovie::class);
+
+        Event::listen(ViewEpisode::class,ViewCountEpisode::class);
+
     }
 }

@@ -22,7 +22,7 @@
                                 </div>
                                 <p class="title">{{$movie->title}}</p>
                             </a>
-                            <div class="viewsCount" style="color: #9d9d9d;">3.2K lượt xem</div>
+                            <div class="viewsCount" style="color: #9d9d9d;">{{$movie->count_view}} lượt xem</div>
                             <div style="float: left;">
                                  <span class="user-rate-image post-large-rate stars-large-vang"
                                        style="display: block;/* width: 100%; */">
@@ -94,7 +94,7 @@
                                 </div>
                                 <p class="title">{{$movie->title}}</p>
                             </a>
-                            <div class="viewsCount" style="color: #9d9d9d;">3.2K lượt xem</div>
+                            <div class="viewsCount" style="color: #9d9d9d;">{{$movie->count_view}} lượt xem</div>
                             <div style="float: left;">
                                  <span class="user-rate-image post-large-rate stars-large-vang"
                                        style="display: block;/* width: 100%; */">

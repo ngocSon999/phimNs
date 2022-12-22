@@ -13,6 +13,7 @@ class Episode extends Model
         'movie_id',
         'link_movie',
         'episode',
+        'count_view',
     ];
     public function movie(){
         return $this->belongsTo(Movie::class,'movie_id','id');

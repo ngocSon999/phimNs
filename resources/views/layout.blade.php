@@ -30,7 +30,7 @@
     <meta property="og:image:width" content="300"/>
     <meta property="og:image:height" content="55"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://themify.me/themify-icons">
     <link rel='dns-prefetch' href='//s.w.org'/>
 
     <link rel='stylesheet' id='bootstrap-css' href='{{asset('css/bootstrap.min.css?ver=5.7.2')}}' media='all'/>
@@ -112,7 +112,7 @@
                 <div class="menu-menu_1-container">
                     <ul id="menu-menu_1" class="nav navbar-nav navbar-left">
                         <li class="current-menu-item active">
-                            <a title="Trang Chủ" href="{{route('home_pages')}}">TrangChủ</a>
+                            <a title="Trang Chủ" href="{{route('home_pages')}}">Trang chủ</a>
                         </li>
                         <li class="mega dropdown">
                             <a title="Thể Loại" href="#" data-toggle="dropdown" class="dropdown-toggle"
@@ -136,11 +136,13 @@
                         </li>
                         <li class="mega dropdown">
                             <a title="Năm phim" href="#" data-toggle="dropdown" class="dropdown-toggle"
-                               aria-haspopup="true">Năm<span class="caret"></span></a>
+                               aria-haspopup="true">Phim mới<span class="caret"></span></a>
                             <ul role="menu" class=" dropdown-menu">
                                 @foreach($year_movie as $year)
-                                    <li><a title="{{$year->year_movie}}"
-                                           href="{{route('year_movie',['year'=>$year->year_movie])}}">{{$year->year_movie}}</a>
+                                    <li class="">
+                                        <a href="{{route('year_movie',['year'=>$year->year_movie])}}"
+                                           title="Phim năm {{$year->year_movie}}">{{$year->year_movie}}
+                                        </a>
                                     </li>
                                 @endforeach
                             </ul>
@@ -289,6 +291,14 @@
         })
     })
 </script>
+
+<!--Đếm số lượt xem phim-->
+{{--<script>--}}
+{{--    $('#count-view-episode').click(function (){--}}
+{{--        var episode_id = $(this).data('episode_id');--}}
+{{--        alert(episode_id);--}}
+{{--    })--}}
+{{--</script>--}}
 @yield('js')
 </body>
 </html>

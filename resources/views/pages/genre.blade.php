@@ -28,14 +28,12 @@
                                     <figure><img class="lazy img-responsive" src="{{asset($item->image_path)}}" alt="{{$item->title}}" title="{{$item->title}}"></figure>
                                     <span class="status">{{$item->resolution}}</span>
                                     <span class="episode">
-                                         @if($item->season != 0)
-                                            <span>Mùa: {{$item->season}}</span>
-                                        @endif
+                                         <span>Phần: {{$item->season}}</span>
                                         <i class="fa fa-play" aria-hidden="true"></i>
                                          @if($item->vietsub == 0)
-                                            Phụ đề - Tập 1/{{$item->total_movie}}
+                                            Phụ đề
                                         @elseif($item->vietsub == 1)
-                                            Thuyết Minh - Tập 1/{{$item->total_movie}}
+                                            Thuyết Minh
                                         @endif
                                     </span>
                                     <div class="icon_overlay"></div>

@@ -49,6 +49,16 @@ class MovieController extends Controller
         $movie->season = $data['season_movie'];
         $movie->save();
     }
+    public function movie_episode(Request $request){
+        $data=$request->all();
+        $movie = Movie::find($data['movie_id']);
+        $totalMovie = $movie->total_movie;
+        $output = '<option>--Chọn tập phim--</option>';
+        for($i=1; $i<=$totalMovie;$i++){
+            $output .= '<option value="'.$i.'">Tập - '.$i.'</option>';
+        }
+        echo $output;
+    }
     /**
      * Show the form for creating a new resource.
      *
