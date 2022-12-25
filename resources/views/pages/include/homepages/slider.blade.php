@@ -8,6 +8,7 @@
         <h3 class="section-title"><span>PHIM HOST</span></h3>
     </div>
     <div id="halim_related_movies-2" class="owl-carousel owl-theme related-film">
+{{--        @foreach($navHeader['movie_host'] as $item)--}}
         @foreach($movie_host as $item)
             <article class="thumb grid-item post-38494">
                 <div class="halim-item">

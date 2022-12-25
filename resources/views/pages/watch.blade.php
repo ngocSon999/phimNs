@@ -44,10 +44,7 @@
                             </div>
                             <div id="report" class="halim-switch"><i class="hl-attention"></i> Report</div>
                             <div class="luotxem"><i class="hl-eye"></i>
-                                <?php
-
-                                ?>
-                                <span>{{$episode_movie->count_view}}</span>   lượt xem
+                                <span id="loadCountViewEpisode_{{$episode_movie->id}}">{{$episode_movie->count_view}} lượt xem</span>
                             </div>
                             <div class="luotxem">
                                 <a class="visible-xs-inline" data-toggle="collapse" href="#moretool" aria-expanded="false" aria-controls="moretool"><i class="hl-forward"></i> Share</a>
@@ -110,6 +107,21 @@
                     <div class="htmlwrap clearfix">
                         <div id="lightout"></div>
                     </div>
+                    <!--Binh luan-->
+                    <div class="section-bar clearfix">
+                        <h2 class="section-title"><span style="color:#ffed4d">Bình luận</span></h2>
+                    </div>
+                    <div style="background-color: #cccccc" class="entry-content htmlwrap clearfix">
+                        <div class="video-item halim-entry-box">
+                            <article class="">
+                                @php
+                                    $curent_url = Request::url();
+                                @endphp
+                                <div style="color:#ffffff" class="fb-comments" data-href="{{$curent_url}}"
+                                     data-width="100%" data-numposts="15"></div>
+                            </article>
+                        </div>
+                    </div>
             </section>
             <section class="related-movies">
                 <div id="halim_related_movies-2xx" class="wrap-slider">
@@ -141,26 +153,47 @@
                             </article>
                         @endforeach
                     </div>
-                    <script>
-                        $(document).ready(function ($) {
-                            var owl = $('#halim_related_movies-2');
-                            owl.owlCarousel({
-                                loop: true,
-                                margin: 4,
-                                autoplay: true,
-                                autoplayTimeout: 3000,
-                                autoplayHoverPause: true,
-                                nav: true,
-                                navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],
-                                responsiveClass: true,
-                                responsive: {0: {items: 2}, 480: {items: 3}, 600: {items: 4}, 1000: {items: 4}}
-                            })
-                        });
-                    </script>
                 </div>
             </section>
         </main>
         <!--sidebar-->
         @include('pages.include.sidebar')
     </div>
+@endsection
+@section('js')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var owl = $('#halim_related_movies-2');
+            owl.owlCarousel({
+                loop: true,
+                margin: 4,
+                autoplay: true,
+                autoplayTimeout: 3000,
+                autoplayHoverPause: true,
+                nav: true,
+                navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],
+                responsiveClass: true,
+                responsive: {0: {items: 2}, 480: {items: 3}, 600: {items: 4}, 1000: {items: 4}}
+            });
+
+            setTimeout(function () {
+                // console.log('test ok');
+                $.ajax({
+                    {{--url: '/movie/episode/view/increase/' + {{ $episode_movie->id }},--}}
+                    url: '/movie/episode/view/increase/{{ $episode_movie->id }}',
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN':'{{ csrf_token() }}',
+                    },
+                    success: function (res) {
+                        // TODO: thay doi so luot view tren giao dien bang Javascript
+                        $('#loadCountViewEpisode_{{ $episode_movie->id }}' ).text(res.countView);
+                    },
+                    error: function (xhr) {
+                        alert(xhr)
+                    }
+                })
+            },1800000);
+        })
+    </script>
 @endsection

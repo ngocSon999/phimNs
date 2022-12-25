@@ -12,93 +12,44 @@ use DB;
 use Event;
 use App\Events\ViewMovie;
 use App\Events\ViewEpisode;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
 
 class IndexController extends Controller
 {
-
     public function home()
     {
-        $categories = Category::orderBy('position', 'ASC')->where('status', 1)->get();
-        $countries = Country::orderBy('id', 'desc')->get();
-        $genres = Genre::orderBy('id', 'desc')->get();
-        $movie_host = Movie::where('status', 1)->where('movie_host', 1)->orderBy('updated_at', 'DESC')->get();
-        $movie_host_trailer = Movie::where('resolution', 'Trailer')->where('status', 1)->orderBy('updated_at', 'DESC')->take(10)->get();
-
-        $movie_host_sidebar = Movie::where('status', 1)->where('movie_host', 1)->orderBy('updated_at', 'DESC')->take(15)->get();
-        $year_movie = Movie::select(DB::raw('count(*), year_movie'))
-            ->where('year_movie', '<>', null)
-            ->groupBy('year_movie')->orderBy('year_movie', 'DESC')
-            ->get();
-        return view('pages.home', compact('categories', 'countries',
-            'genres', 'movie_host', 'year_movie', 'movie_host_sidebar', 'movie_host_trailer'));
+        return view::make('pages.home', ['navHeader'=>'navHeader']);
     }
-
 
     public function category($slug)
     {
-        $categories = Category::orderBy('position', 'ASC')->where('status', 1)->get();
-        $countries = Country::orderBy('id', 'desc')->get();
-        $genres = Genre::orderBy('id', 'desc')->get();
-        $movie_host_sidebar = Movie::where('status', 1)->where('movie_host', 1)->orderBy('updated_at', 'DESC')->take(15)->get();
-        $movie_host_trailer = Movie::where('resolution', 'Trailer')->where('status', 1)->orderBy('updated_at', 'DESC')->take(10)->get();
-        $year_movie = Movie::select(DB::raw('count(*), year_movie'))
-            ->where('year_movie', '<>', null)
-            ->groupBy('year_movie')->orderBy('year_movie', 'DESC')
-            ->get();
         $cate_slug = Category::where('slug', $slug)->first();
         $movies = Movie::where('category_id', $cate_slug->id)->where('status', 1)->orderBy('updated_at', 'DESC')->paginate(12);
-        return view('pages.category', compact('categories', 'countries', 'movie_host_trailer',
-            'genres', 'cate_slug', 'movies', 'year_movie', 'movie_host_sidebar'));
+
+        return view('pages.category', ['navHeader'=>'navHeader','cate_slug'=>$cate_slug, 'movies'=>$movies]);
     }
 
     public function genre($slug)
     {
-        $categories = Category::orderBy('position', 'ASC')->where('status', 1)->get();
-        $countries = Country::orderBy('id', 'desc')->get();
-        $genres = Genre::orderBy('id', 'desc')->get();
-        $movie_host_sidebar = Movie::where('status', 1)->where('movie_host', 1)->orderBy('updated_at', 'DESC')->take(15)->get();
-        $movie_host_trailer = Movie::where('resolution', 'Trailer')->where('status', 1)->orderBy('updated_at', 'DESC')->take(10)->get();
-        $year_movie = Movie::select(DB::raw('count(*), year_movie'))
-            ->where('year_movie', '<>', null)
-            ->groupBy('year_movie')->orderBy('year_movie', 'DESC')
-            ->get();
         $genre_slug = Genre::where('slug', $slug)->first();
         $movies = $genre_slug->movieGenre()->where('status', 1)->orderBy('updated_at', 'DESC')->paginate(12);
-        return view('pages.genre', compact('categories', 'countries',
-            'genres', 'year_movie', 'genre_slug', 'movies', 'movie_host_sidebar', 'movie_host_trailer'));
+
+        return view('pages.genre', ['navHeader'=>'navHeader','genre_slug'=>$genre_slug, 'movies'=>$movies]);
     }
 
     public function country($slug)
     {
-        $categories = Category::orderBy('position', 'ASC')->where('status', 1)->get();
-        $countries = Country::orderBy('id', 'desc')->get();
-        $genres = Genre::orderBy('id', 'desc')->get();
-        $movie_host_sidebar = Movie::where('status', 1)->where('movie_host', 1)->orderBy('updated_at', 'DESC')->take(15)->get();
-        $movie_host_trailer = Movie::where('resolution', 'Trailer')->where('status', 1)->orderBy('updated_at', 'DESC')->take(10)->get();
-        $year_movie = Movie::select(DB::raw('count(*), year_movie'))
-            ->where('year_movie', '<>', null)
-            ->groupBy('year_movie')->orderBy('year_movie', 'DESC')
-            ->get();
         $country_slug = Country::where('slug', $slug)->first();
         $movies = Movie::where('country_id', $country_slug->id)->where('status', 1)->orderBy('updated_at', 'DESC')->paginate(12);
-        return view('pages.country', compact('categories', 'countries', 'genres',
-            'year_movie', 'country_slug', 'movies', 'movie_host_sidebar', 'movie_host_trailer'));
+
+        return view('pages.country', ['navHeader'=>'navHeader','country_slug'=>$country_slug, 'movies'=>$movies]);
     }
+
 
     public function movie($slug, $id)
     {
-        $categories = Category::orderBy('position', 'ASC')->where('status', 1)->get();
-        $countries = Country::orderBy('id', 'desc')->get();
-        $genres = Genre::orderBy('id', 'desc')->get();
-        $movie_host_sidebar = Movie::where('status', 1)->where('movie_host', 1)->orderBy('updated_at', 'DESC')->take(15)->get();
-        $movie_host_trailer = Movie::where('resolution', 'Trailer')->where('status', 1)->orderBy('updated_at', 'DESC')->take(10)->get();
-        $year_movie = Movie::select(DB::raw('count(*), year_movie'))
-            ->where('year_movie', '<>', null)
-            ->groupBy('year_movie')->orderBy('year_movie', 'DESC')
-            ->get();
         $movie = Movie::with('category', 'country', 'genreMovie')->where('slug', $slug)->where('id', $id)->where('status', 1)->first();
-//        ViewMovie::dispatch($movie);
-        event(new ViewMovie($movie));
         $movie_related = Movie::with('category', 'country', 'genreMovie')
             ->where('status', 1)
             ->where('category_id', $movie->category->id)
@@ -109,43 +60,24 @@ class IndexController extends Controller
         $episode_movie = Episode::with('movie')->where('movie_id',$id)->get();
         $curent_episode =$episode_movie->count() ;//số tập hiện đã up link
 
-        return view('pages.movie', compact('categories', 'countries', 'genres',
-            'year_movie', 'movie', 'movie_related', 'movie_host_sidebar', 'movie_host_trailer','curent_episode'));
+        return view('pages.movie', ['navHeader'=>'navHeader','movie'=>$movie,'episode_movie'=>$episode_movie,
+            'movie_related'=>$movie_related,'curent_episode'=>$curent_episode ]);
     }
+
     public function year_movie($year)
     {
-        $categories = Category::orderBy('position', 'ASC')->where('status', 1)->get();
-        $countries = Country::orderBy('id', 'desc')->get();
-        $genres = Genre::orderBy('id', 'desc')->get();
-        $movie_host_sidebar = Movie::where('status', 1)->where('movie_host', 1)->orderBy('updated_at', 'DESC')->take(15)->get();
-        $movie_host_trailer = Movie::where('resolution', 'Trailer')->where('status', 1)->orderBy('updated_at', 'DESC')->take(10)->get();
-        $year_movie = Movie::select(DB::raw('count(*), year_movie'))
-            ->where('year_movie', '<>', null)
-            ->groupBy('year_movie')->orderBy('year_movie', 'DESC')
-            ->get();
         $movies = Movie::where('year_movie', $year)->where('status', 1)->orderBy('updated_at', 'DESC')->paginate(24);
-        return view('pages.year_movie', compact('categories', 'countries', 'genres',
-            'year_movie', 'movies', 'year', 'movie_host_sidebar', 'movie_host_trailer'));
+        return view('pages.year_movie', ['navHeader'=>'navHeader','year'=>$year,'movies'=>$movies]);
     }
 
     public function tag_movie($tag)
     {
-        $categories = Category::orderBy('position', 'ASC')->where('status', 1)->get();
-
-        $countries = Country::orderBy('id', 'desc')->get();
-        $genres = Genre::orderBy('id', 'desc')->get();
-        $movie_host_sidebar = Movie::where('status', 1)->where('movie_host', 1)->orderBy('updated_at', 'DESC')->take(15)->get();
-        $movie_host_trailer = Movie::where('resolution', 'Trailer')->where('status', 1)->orderBy('updated_at', 'DESC')->take(10)->get();
-        $year_movie = Movie::select(DB::raw('count(*), year_movie'))
-            ->where('year_movie', '<>', null)
-            ->groupBy('year_movie')->orderBy('year_movie', 'DESC')
-            ->get();
         $movies = Movie::where(function ($query) use ($tag){
             $query->orwhere('title', 'like', '%' . $tag . '%');
             $query->orwhere('tag_movie', 'like', '%' . $tag . '%');
         })->where('status', 1)->orderBy('updated_at', 'DESC')->paginate(24);
-        return view('pages.tag_movie', compact('categories', 'countries', 'genres',
-            'year_movie', 'movies', 'tag', 'movie_host_sidebar', 'movie_host_trailer'));
+
+        return view('pages.tag_movie', ['navHeader'=>'navHeader','tag'=>$tag,'movies'=>$movies]);
     }
 
     public function top_movie(Request $request)
@@ -157,14 +89,14 @@ class IndexController extends Controller
             $html .= '<div class="item">
                 <a href="'.url('phim/'.$item->slug.'/'. $item->id).'" title="'.$item->title.'">
                         <div class="item-link">
-                        <img src="'.url($item->image_path).'"
+                        <img src="'.asset($item->image_path).'"
                     class="lazy post-thumb" alt="'.$item->title.'"
                     title="'.$item->title.'"/>
                         <span class="is_trailer">'.$item->resolution.'</span>
                 </div>
                     <p class="title">'.$item->title.'</p>
                 </a>
-                    <div class="viewsCount" style="color: #9d9d9d;">'.$item->count_view.' lượt xem</div>
+                    <div id="loadViewCount_'.$item->id.'" class="viewsCount" style="color: #9d9d9d;">'.$item->count_view.' lượt xem</div>
                     <div style="float: left;">
                     <span class="user-rate-image post-large-rate stars-large-vang"
                           style="display: block;/* width: 100%; */">
@@ -179,17 +111,17 @@ class IndexController extends Controller
         $topMovie = Movie::where('top_view', 0)->where('status', 1)->orderBy('updated_at', 'DESC')->take(8)->get();
         $html = '';
         foreach ($topMovie as $item) {
-            $html .= ' <div class="item post-37176">
+            $html .= ' <div class="item">
                 <a href="' . url('phim/' . $item->slug . '/' . $item->id) . '" title="' . $item->title . '">
                         <div class="item-link">
-                        <img src="' . url($item->image_path) . '"
+                        <img src="' . asset($item->image_path) . '"
                     class="lazy post-thumb" alt="' . $item->title . '"
                     title="' . $item->title . '"/>
                         <span class="is_trailer">' . $item->resolution . '</span>
                 </div>
                     <p class="title">' . $item->title . '</p>
                 </a>
-                    <div class="viewsCount" style="color: #9d9d9d;">'.$item->count_view.' lượt xem</div>
+                    <div id="loadViewCount_'.$item->id.'" class="viewsCount" style="color: #9d9d9d;">'.$item->count_view.' lượt xem</div>
                     <div style="float: left;">
                     <span class="user-rate-image post-large-rate stars-large-vang"
                           style="display: block;/* width: 100%; */">
@@ -204,16 +136,6 @@ class IndexController extends Controller
         if(isset($_GET['search-title-movie'])){
             if(!empty($_GET['search'])){
                 $search = $_GET['search'];
-                $categories = Category::orderBy('position', 'ASC')->where('status', 1)->get();
-
-                $countries = Country::orderBy('id', 'desc')->get();
-                $genres = Genre::orderBy('id', 'desc')->get();
-                $movie_host_sidebar = Movie::where('status', 1)->where('movie_host', 1)->orderBy('updated_at', 'DESC')->take(15)->get();
-                $movie_host_trailer = Movie::where('resolution', 'Trailer')->where('status', 1)->orderBy('updated_at', 'DESC')->take(10)->get();
-                $year_movie = Movie::select(DB::raw('count(*), year_movie'))
-                    ->where('year_movie', '<>', null)
-                    ->groupBy('year_movie')->orderBy('year_movie', 'DESC')
-                    ->get();
                 $movies = Movie::where(function ($query) use ($search){
                     $query->orwhere('title','like','%'.$search.'%');
                     $query->orwhere('slug','like','%'.$search.'%');
@@ -223,40 +145,25 @@ class IndexController extends Controller
                 })
                     ->where('status', 1)
                     ->orderBy('updated_at', 'DESC')->paginate(24);
-                return view('pages.search_movie', compact('categories', 'countries', 'genres',
-                    'year_movie', 'movies', 'search', 'movie_host_sidebar', 'movie_host_trailer'));
+                return view('pages.search_movie', ['navHeader'=>'navHeader','search'=>$search,'movies'=>$movies]);
             }else{
                 return back();
             }
         }
-
     }
 
     public function watch($slug,$season,$tap)
     {
-
-        $categories = Category::orderBy('position', 'ASC')->where('status', 1)->get();
-        $countries = Country::orderBy('id', 'desc')->get();
-        $genres = Genre::orderBy('id', 'desc')->get();
-        $movie_host_sidebar = Movie::where('status', 1)->where('movie_host', 1)->orderBy('updated_at', 'DESC')->take(15)->get();
-        $movie_host_trailer = Movie::where('resolution', 'Trailer')->where('status', 1)->orderBy('updated_at', 'DESC')->take(10)->get();
-        $year_movie = Movie::select(DB::raw('count(*), year_movie'))
-            ->where('year_movie', '<>', null)
-            ->groupBy('year_movie')->orderBy('year_movie', 'DESC')
-            ->get();
         $movie = Movie::where('slug',$slug)->first();
         //cắt lấy tập $episode
         $episode = substr($tap,6);
         $episode_movie = Episode::where('movie_id',$movie->id)->where('episode',$episode)->first();
-
-        ViewEpisode::dispatch($episode_movie);
-
         $movie_related = Movie::with('category','country','genreMovie','episode')
             ->where('category_id',$movie->category->id)->where('status',1)
             ->orderBy(DB::raw('Rand()'))->get();
 
-        return view('pages.watch', compact('categories', 'countries', 'genres',
-            'movie','year_movie','movie_host_sidebar', 'movie_host_trailer','movie_related','episode_movie'));
+        return view('pages.watch', ['navHeader'=>'navHeader', 'movie_related'=>$movie_related,'movie'=>$movie,
+            'episode_movie'=>$episode_movie]);
     }
 
     public function episode()
@@ -264,8 +171,28 @@ class IndexController extends Controller
         return view('pages.episode');
     }
 
-//    public function update_count_view(Request $request){
-//
-//    }
-
+    //tăng view của phim
+    public function increaseViewCount($id)
+    {
+        $movie = Movie::find($id);
+        $movie->increment('count_view');
+        $countView = $movie->count_view.' lượt xem';
+        return response()->json([
+            'message' => 'Increase view count successfully!',
+            'status' => 200,
+            'countView'=>$countView,
+        ]);
+    }
+        //tăng view của tập phim
+    public function viewCountEpisode($id)
+    {
+        $episode = Episode::find($id);
+        $episode->increment('count_view');
+        $countView = $episode->count_view.' lượt xem';
+        return response()->json([
+            'message' => 'Increase view count successfully!',
+            'status' => 200,
+            'countView'=>$countView,
+        ]);
+    }
 }

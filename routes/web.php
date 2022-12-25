@@ -23,6 +23,7 @@ use App\Http\Controllers\CountryController;
 */
 
 Route::get('/', [IndexController::class, 'home'])->name('home_pages');
+Route::get('/header', [IndexController::class, 'viewHeader'])->name('view');
 Route::get('/danh-muc/{slug}', [IndexController::class, 'category'])->name('category');
 Route::get('/the-loai/{slug}', [IndexController::class, 'genre'])->name('genre');
 Route::get('/quoc-gia/{slug}', [IndexController::class, 'country'])->name('country');
@@ -38,6 +39,8 @@ Route::get('/update-count-view', [IndexController::class, 'update_count_view'])-
 Route::get('/watch/{slug}/{season}/{tap}', [IndexController::class, 'watch'])->name('watch');
 Route::get('/episode', [IndexController::class, 'episode'])->name('episode');//Tập phim
 
+Route::post('/movie/view/increase/{id}', [IndexController::class, 'increaseViewCount'])->name('movie.view.increase.count');//tăng view của phim
+Route::post('/movie/episode/view/increase/{id}', [IndexController::class, 'viewCountEpisode'])->name('episode.view.increase.count');//tăng view của tập phim
 
 Auth::routes();
 

@@ -9,7 +9,7 @@
         <section class="tab-content">
             <div role="tabpanel" class="tab-pane active halim-ajax-popular-post">
                 <div style="max-height: 450px; overflow-y: auto"  id="halim-ajax-popular-post" class="popular-post">
-                    @foreach($movie_host_sidebar as $movie)
+                    @foreach($navHeader['movie_host_sidebar'] as $movie)
                         <div class="item post-37176">
                             <a href="{{route('movie',['slug'=>$movie->slug,'id'=>$movie->id])}}"
                                title="{{$movie->title}}">
@@ -22,7 +22,7 @@
                                 </div>
                                 <p class="title">{{$movie->title}}</p>
                             </a>
-                            <div class="viewsCount" style="color: #9d9d9d;">{{$movie->count_view}} lượt xem</div>
+                            <div id="loadCountView_{{$movie->id}}" class="viewsCount" style="color: #9d9d9d;">{{$movie->count_view}} lượt xem</div>
                             <div style="float: left;">
                                  <span class="user-rate-image post-large-rate stars-large-vang"
                                        style="display: block;/* width: 100%; */">
@@ -81,7 +81,7 @@
         <section class="tab-content">
             <div role="tabpanel" class="tab-pane active halim-ajax-popular-post">
                 <div style="max-height: 450px; overflow-y: auto" id="halim-ajax-popular-post" class="popular-post">
-                    @foreach($movie_host_trailer as $movie)
+                    @foreach($navHeader['movie_host_trailer'] as $movie)
                         <div class="item post-37176">
                             <a href="{{route('movie',['slug'=>$movie->slug,'id'=>$movie->id])}}"
                                title="{{$movie->title}}">

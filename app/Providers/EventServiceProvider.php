@@ -37,8 +37,10 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         Event::listen(ViewMovie::class,CountViewMovie::class);
+//        Event::listen(queueable(function (ViewMovie $event) {
+//
+//        })->delay(now()->addSeconds(20)));
 
         Event::listen(ViewEpisode::class,ViewCountEpisode::class);
-
     }
 }

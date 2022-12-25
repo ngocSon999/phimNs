@@ -46,7 +46,7 @@ class CategoryController extends Controller
         ]);
         $category->position = $category->id - 1;
         $category->save();
-        return redirect()-route('category.index')->with('status','Thêm danh mục phim thành công');
+        return redirect()->route('category.index')->with('status','Thêm danh mục phim thành công');
     }
 
     /**

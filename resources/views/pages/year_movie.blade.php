@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col-xs-6">
                         <div class="yoast_breadcrumb hidden-xs"><span><span><a href="">Phim thuộc năm: </a>
-                           @foreach($year_movie as $yearItem)
+                           @foreach($navHeader['year_movie'] as $yearItem)
                            <span class="breadcrumb_last" aria-current="page">
                                <a href="{{route('year_movie',['year'=>$yearItem->year_movie])}}">{{$yearItem->year_movie}}</a> »
                            </span>
@@ -57,14 +57,6 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="text-center">
-                    {{--                    <ul class='page-numbers'>--}}
-                    {{--                        <li><span aria-current="page" class="page-numbers current">1</span></li>--}}
-                    {{--                        <li><a class="page-numbers" href="">2</a></li>--}}
-                    {{--                        <li><a class="page-numbers" href="">3</a></li>--}}
-                    {{--                        <li><span class="page-numbers dots">&hellip;</span></li>--}}
-                    {{--                        <li><a class="page-numbers" href="">55</a></li>--}}
-                    {{--                        <li><a class="next page-numbers" href=""><i class="hl-down-open rotate-right"></i></a></li>--}}
-                    {{--                    </ul>--}}
                     {!! $movies->links() !!}
                 </div>
             </section>

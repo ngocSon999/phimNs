@@ -76,7 +76,14 @@
                                     <li class="list-info-group-item"><span>Season</span> : {{$movie->season}}</li>
 
                                     <li class="list-info-group-item"><span>Số tập</span> : {{$movie->total_movie}}</li>
-                                    <li class="list-info-group-item"><span>Tình trạng</span> : Đã cập nhật {{$curent_episode .'/'.$movie->total_movie}} tập</li>
+                                    <li class="list-info-group-item">
+                                        @if($curent_episode != 0 && $movie->trailer != 'Trailer')
+                                            <span>Tình trạng</span> : Đã cập nhật {{$curent_episode .'/'.$movie->total_movie}} tập
+                                        @else
+                                            <span>Tình trạng</span> : Đang cập nhật
+                                        @endif
+
+                                    </li>
                                     <li class="list-info-group-item"><span>Thể loại</span> :
                                         @foreach($movie->genreMovie as $genre)
                                             <a class="badge badge-dark" href="{{route('genre',['slug'=>$genre->slug])}}"
@@ -209,26 +216,54 @@
                             </article>
                         @endforeach
                     </div>
-                    <script>
-                        $(document).ready(function ($) {
-                            var owl = $('#halim_related_movies-2');
-                            owl.owlCarousel({
-                                loop: true,
-                                margin: 4,
-                                autoplay: true,
-                                autoplayTimeout: 3000,
-                                autoplayHoverPause: true,
-                                nav: true,
-                                navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],
-                                responsiveClass: true,
-                                responsive: {0: {items: 2}, 480: {items: 3}, 600: {items: 4}, 1000: {items: 4}}
-                            })
-                        });
-                    </script>
+
                 </div>
             </section>
         </main>
         <!--sidebar-->
         @include('pages.include.sidebar')
     </div>
+@endsection
+@section('js')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var owl = $('#halim_related_movies-2');
+            owl.owlCarousel({
+                loop: true,
+                margin: 4,
+                autoplay: true,
+                autoplayTimeout: 3000,
+                autoplayHoverPause: true,
+                nav: true,
+                navText: ['<i class="hl-down-open rotate-left"></i>', '<i class="hl-down-open rotate-right"></i>'],
+                responsiveClass: true,
+                responsive: {0: {items: 2}, 480: {items: 3}, 600: {items: 4}, 1000: {items: 4}}
+            });
+            <!--Tăng view khi vào trang movie-->
+            setTimeout(function () {
+                // console.log('test ok');
+                $.ajax({
+                    url: '/movie/view/increase/{{ $movie->id }}',
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN':'{{ csrf_token() }}',
+                    },
+                    success: function (res) {
+                        // TODO: thay doi so luot view tren giao dien bang Javascript
+                        $('#loadCountView_{{ $movie->id }}').text(res.countView);
+                        $.ajax({
+                            url: '{{route('top_movie_default')}}',
+                            type: 'GET',
+                            success: function (res) {
+                                $('.show-data-default').html(res);
+                            }
+                        })
+                    },
+                    error: function (xhr) {
+                        alert(xhr)
+                    }
+                })
+            }, 15000);
+        })
+    </script>
 @endsection

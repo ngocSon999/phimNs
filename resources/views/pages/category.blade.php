@@ -5,8 +5,15 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-6">
-                        <div class="yoast_breadcrumb hidden-xs"><span><span><a href="">{{$cate_slug->title}}</a> »
-                                    <span class="breadcrumb_last" aria-current="page">2020</span></span></span>
+                        <div class="yoast_breadcrumb hidden-xs"><span><span>
+                           <a  href="{{route('category',['slug'=>$cate_slug->slug])}}">{{$cate_slug->title}}</a> »
+                           @foreach($navHeader['year_movie'] as $value)
+                              <a title="Năm - {{$value->year_movie}}"
+                                 href="{{route('year_movie',['year'=>$value->year_movie])}}">
+                                  {{$value->year_movie}}
+                              </a> »
+                           @endforeach
+                           </span></span>
                         </div>
                     </div>
                 </div>
@@ -24,8 +31,10 @@
                     @foreach($movies as $item)
                         <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item post-27021">
                             <div class="halim-item">
-                                <a class="halim-thumb" href="{{route('movie',['slug'=>$item->slug,'id'=>$item->id])}}" title="{{$item->title}}">
-                                    <figure><img class="lazy img-responsive" src="{{asset($item->image_path)}}" alt="{{$item->title}}" title="{{$item->title}}"></figure>
+                                <a class="halim-thumb" href="{{route('movie',['slug'=>$item->slug,'id'=>$item->id])}}"
+                                   title="{{$item->title}}">
+                                    <figure><img class="lazy img-responsive" src="{{asset($item->image_path)}}"
+                                                 alt="{{$item->title}}" title="{{$item->title}}"></figure>
                                     <span class="status">{{$item->resolution}}</span>
                                     <span class="episode">
                                             <span>Phần: {{$item->season}}</span>

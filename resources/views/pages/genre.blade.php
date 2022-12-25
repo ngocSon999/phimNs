@@ -5,8 +5,14 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-6">
-                        <div class="yoast_breadcrumb hidden-xs"><span><span><a href="">{{$genre_slug->title}}</a> »
-                              <span class="breadcrumb_last" aria-current="page">2020</span></span></span>
+                        <div class="yoast_breadcrumb hidden-xs"><span><span>
+                           <a href="{{route('genre',['slug'=>$genre_slug->slug])}}">{{$genre_slug->title}}</a> »
+                            @foreach($navHeader['year_movie'] as $value)
+                                        <a title="Năm - {{$value->year_movie}}"
+                                           href="{{route('year_movie',['year'=>$value->year_movie])}}">
+                                  {{$value->year_movie}}
+                              </a> »
+                            @endforeach
                         </div>
                     </div>
                 </div>
